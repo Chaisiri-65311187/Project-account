@@ -77,7 +77,29 @@ class MyHomePage extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               subtitle:
                   Text(device.brand, style: TextStyle(color: Colors.grey[600])),
-              trailing: Icon(Icons.arrow_forward_ios, color: Colors.blueAccent),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return ScaleTransition(scale: animation, child: child);
+                    },
+                    child: IconButton(
+                      key: ValueKey<bool>(device.isOn),
+                      icon: Icon(
+                        device.isOn ? Icons.power : Icons.power_off,
+                        color: device.isOn ? Colors.green : Colors.red,
+                      ),
+                      onPressed: () {
+                        deviceProvider.toggleDeviceStatus(index);
+                      },
+                    ),
+                  ),
+                  Icon(Icons.arrow_forward_ios, color: Colors.blueAccent),
+                ],
+              ),
               onTap: () {
                 Navigator.push(
                   context,

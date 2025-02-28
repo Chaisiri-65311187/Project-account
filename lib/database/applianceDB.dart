@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import '../model/deviceItem.dart';
 
 class applianceDB {
