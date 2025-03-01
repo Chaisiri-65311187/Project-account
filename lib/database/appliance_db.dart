@@ -28,10 +28,11 @@ class ApplianceDB {
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE appliances (
-        id TEXT PRIMARY KEY,
-        name TEXT,
-        brand TEXT,
-        isOn INTEGER
+         id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        brand TEXT NOT NULL,
+        isOn INTEGER NOT NULL,
+        imgPath TEXT NOT NULL
       )
     ''');
   }

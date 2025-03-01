@@ -15,20 +15,18 @@ class EditScreen extends StatefulWidget {
 class _EditScreenState extends State<EditScreen> {
   final _formKey = GlobalKey<FormState>();
   late String _name;
-  late String _brand;
 
   @override
   void initState() {
     super.initState();
     _name = widget.device.name;
-    _brand = widget.device.brand;
   }
 
   void _saveChanges() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       Provider.of<DeviceProvider>(context, listen: false)
-          .updateDevice(widget.device.id, _name, _brand);
+          .updateDevice(widget.device.id, _name, widget.device.brand);
       Navigator.pop(context);
     }
   }
@@ -91,11 +89,9 @@ class _EditScreenState extends State<EditScreen> {
                   onSaved: (value) => _name = value!,
                 ),
                 TextFormField(
-                  initialValue: _brand,
+                  initialValue: widget.device.brand,
                   decoration: const InputDecoration(labelText: 'Brand'),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter a brand' : null,
-                  onSaved: (value) => _brand = value!,
+                  readOnly: true,
                 ),
                 const SizedBox(height: 20),
                 Row(

@@ -17,12 +17,13 @@ class DeviceProvider with ChangeNotifier {
     notifyListeners(); // อัปเดต UI
   }
 
-  void addDevice(String name, String brand) {
+  void addDevice(String name, String brand, String imgPath) {
     final newDevice = DeviceItem(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       name: name,
       brand: brand,
       isOn: false,
+      imgPath: imgPath, // เพิ่ม imgPath
     );
     _db.insertDevice(newDevice);
     loadDevices();

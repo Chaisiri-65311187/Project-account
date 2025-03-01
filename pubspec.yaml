@@ -64,6 +64,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/icons/air_conditioner.png
+    - assets/icons/vacuum.png
+    - assets/icons/light.png
+    - assets/icons/fan.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

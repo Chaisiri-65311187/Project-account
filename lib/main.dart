@@ -73,6 +73,13 @@ class MyHomePage extends StatelessWidget {
             ),
             child: ListTile(
               contentPadding: const EdgeInsets.all(16),
+              leading: Image.asset(
+                device.imgPath,
+                width: 50,
+                height: 50,
+                errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.devices, size: 50),
+              ),
               title: Text(device.name,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               subtitle:

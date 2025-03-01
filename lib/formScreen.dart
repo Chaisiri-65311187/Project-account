@@ -13,15 +13,15 @@ class _FormScreenState extends State<FormScreen> {
   final _formKey = GlobalKey<FormState>();
   String _name = '';
   String _brand = '';
+  String _type = 'แอร์'; // ค่าเริ่มต้น
 
-  void _saveDevice() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      Provider.of<DeviceProvider>(context, listen: false)
-          .addDevice(_name, _brand);
-      Navigator.pop(context);
-    }
-  }
+  // กำหนดไอคอนตามประเภท
+  Map<String, String> typeIcons = {
+    'แอร์': 'assets/icons/air_conditioner.png',
+    'เครื่องดูดฝุ่น': 'assets/icons/vacuum.png',
+    'ไฟ': 'assets/icons/light.png',
+    'พัดลม': 'assets/icons/fan.png',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -91,13 +91,30 @@ class _FormScreenState extends State<FormScreen> {
                     _brand = value!;
                   },
                 ),
+                DropdownButtonFormField<String>(
+                  value: _type,
+                  decoration: const InputDecoration(labelText: 'Type'),
+                  items: typeIcons.keys.map((type) {
+                    return DropdownMenuItem(
+                      value: type,
+                      child: Text(type),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _type = value!;
+                    });
+                  },
+                ),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
+                      String imgPath = typeIcons[_type]!; // ดึง path ของไอคอน
                       Provider.of<DeviceProvider>(context, listen: false)
-                          .addDevice(_name, _brand);
+                          .addDevice(
+                              _name, _brand, imgPath); // ส่ง imgPath ไปด้วย
                       Navigator.pop(context);
                     }
                   },
