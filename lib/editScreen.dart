@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'provider/deviceProvider.dart';
-import 'model/deviceItem.dart';
+import 'model/deviceitem.dart';
 
 class EditScreen extends StatefulWidget {
   final DeviceItem device;

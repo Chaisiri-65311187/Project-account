@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
-import '../model/deviceItem.dart';
-import '../database/applianceDB.dart';
+import '../model/deviceitem.dart';
+import '../database/appliance_db.dart';
 
 class DeviceProvider with ChangeNotifier {
-  final applianceDB _db = applianceDB.instance;
+  final ApplianceDB _db = ApplianceDB.instance;
   List<DeviceItem> _devices = [];
 
   List<DeviceItem> get devices => _devices;
 
-  void loadDevices() {
-    _devices = _db.fetchDevices();
-    notifyListeners();
+  DeviceProvider() {
+    loadDevices(); // โหลดข้อมูลตอนเริ่มแอป
+  }
+
+  Future<void> loadDevices() async {
+    _devices = await ApplianceDB.instance.fetchDevices();
+    notifyListeners(); // อัปเดต UI
   }
 
   void addDevice(String name, String brand) {
