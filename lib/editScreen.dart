@@ -31,10 +31,31 @@ class _EditScreenState extends State<EditScreen> {
     }
   }
 
-  void _deleteDevice() {
-    Provider.of<DeviceProvider>(context, listen: false)
-        .removeDevice(widget.device.id);
-    Navigator.pop(context);
+  void _confirmDeleteDevice() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Deletion'),
+          content: const Text('Are you sure you want to delete this device?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Provider.of<DeviceProvider>(context, listen: false)
+                    .removeDevice(widget.device.id);
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -99,7 +120,7 @@ class _EditScreenState extends State<EditScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton(
-                      onPressed: _deleteDevice,
+                      onPressed: _confirmDeleteDevice,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                       ),
