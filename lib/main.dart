@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'provider/deviceProvider.dart';
 import 'formScreen.dart';
 import 'editScreen.dart';
+import 'utils/time_formatter.dart'; //เพิ่มตัวช่วย format เวลาให้ด้วย
 
 void main() async {
   runApp(MyApp());
@@ -49,7 +50,7 @@ class MyHomePage extends StatelessWidget {
             ],
           ),
           child: const Text(
-            'Smart Device Manager',
+            'Smart Appliance Manager',
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -82,8 +83,17 @@ class MyHomePage extends StatelessWidget {
               ),
               title: Text(device.name,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              subtitle:
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(device.brand, style: TextStyle(color: Colors.grey[600])),
+                  if (device.lastOpenedTime != null)
+                    Text(
+                      'เปิดล่าสุด: ${formatDateTime(device.lastOpenedTime!)}',
+                      style: TextStyle(color: Colors.blueGrey, fontSize: 12),
+                    ),
+                ],
+              ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -100,11 +110,15 @@ class MyHomePage extends StatelessWidget {
                         color: device.isOn ? Colors.green : Colors.red,
                       ),
                       onPressed: () {
+                        final now = DateTime.now();
                         deviceProvider.toggleDeviceStatus(index);
+                        if (!device.isOn) {
+                          deviceProvider.updateLastOpenedTime(device.id, now);
+                        }
                       },
                     ),
                   ),
-                  Icon(Icons.arrow_forward_ios, color: Colors.blueAccent),
+                  Icon(Icons.arrow_forward_ios, color: Colors.purple),
                 ],
               ),
               onTap: () {

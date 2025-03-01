@@ -13,8 +13,8 @@ class DeviceProvider with ChangeNotifier {
   }
 
   Future<void> loadDevices() async {
-    _devices = await ApplianceDB.instance.fetchDevices();
-    notifyListeners(); // อัปเดต UI
+    _devices = await _db.fetchDevices();
+    notifyListeners();
   }
 
   void addDevice(String name, String brand, String imgPath) {
@@ -23,7 +23,8 @@ class DeviceProvider with ChangeNotifier {
       name: name,
       brand: brand,
       isOn: false,
-      imgPath: imgPath, // เพิ่ม imgPath
+      imgPath: imgPath,
+      lastOpenedTime: null, // ตอนสร้างใหม่ยังไม่มีเวลาเปิด
     );
     _db.insertDevice(newDevice);
     loadDevices();
@@ -40,8 +41,10 @@ class DeviceProvider with ChangeNotifier {
   void updateDevice(String id, String newName, String newBrand) {
     final index = _devices.indexWhere((device) => device.id == id);
     if (index != -1) {
-      _devices[index].name = newName;
-      _devices[index].brand = newBrand;
+      _devices[index] = _devices[index].copyWith(
+        name: newName,
+        brand: newBrand,
+      );
       _db.updateDevice(_devices[index]);
       notifyListeners();
     }
@@ -51,5 +54,15 @@ class DeviceProvider with ChangeNotifier {
     _devices.removeWhere((device) => device.id == id);
     _db.deleteDevice(id);
     notifyListeners();
+  }
+
+  // ✅ เพิ่มฟังก์ชันอัปเดตเวลาเปิดล่าสุด
+  void updateLastOpenedTime(String id, DateTime time) {
+    final index = _devices.indexWhere((device) => device.id == id);
+    if (index != -1) {
+      _devices[index] = _devices[index].copyWith(lastOpenedTime: time);
+      _db.updateDevice(_devices[index]);
+      notifyListeners();
+    }
   }
 }

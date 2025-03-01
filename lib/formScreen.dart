@@ -68,10 +68,11 @@ class _FormScreenState extends State<FormScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
-                  decoration: const InputDecoration(labelText: 'Device Name'),
+                  decoration:
+                      const InputDecoration(labelText: 'Smart Appliance Name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter device name';
+                      return 'Please enter name';
                     }
                     return null;
                   },

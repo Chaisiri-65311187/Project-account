@@ -20,21 +20,29 @@ class ApplianceDB {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2, // ต้องเปลี่ยนเป็นเวอร์ชันใหม่ เพื่อให้ onUpgrade ทำงาน
       onCreate: _createDB,
+      onUpgrade: _upgradeDB, // รองรับการอัปเกรด schema
     );
   }
 
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE appliances (
-         id TEXT PRIMARY KEY,
+        id TEXT PRIMARY KEY,
         name TEXT NOT NULL,
         brand TEXT NOT NULL,
         isOn INTEGER NOT NULL,
-        imgPath TEXT NOT NULL
+        imgPath TEXT NOT NULL,
+        lastOpenedTime TEXT  // เพิ่มคอลัมน์ใหม่
       )
     ''');
+  }
+
+  Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('ALTER TABLE appliances ADD COLUMN lastOpenedTime TEXT');
+    }
   }
 
   Future<void> insertDevice(DeviceItem device) async {
@@ -59,6 +67,16 @@ class ApplianceDB {
       device.toMap(),
       where: 'id = ?',
       whereArgs: [device.id],
+    );
+  }
+
+  Future<void> updateLastOpenedTime(String id, DateTime time) async {
+    final db = await instance.database;
+    await db.update(
+      'appliances',
+      {'lastOpenedTime': time.toIso8601String()},
+      where: 'id = ?',
+      whereArgs: [id],
     );
   }
 

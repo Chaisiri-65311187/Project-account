@@ -83,7 +83,8 @@ class _EditScreenState extends State<EditScreen> {
               children: [
                 TextFormField(
                   initialValue: _name,
-                  decoration: const InputDecoration(labelText: 'Device Name'),
+                  decoration:
+                      const InputDecoration(labelText: 'Smart Appliance Name'),
                   validator: (value) =>
                       value!.isEmpty ? 'Please enter a name' : null,
                   onSaved: (value) => _name = value!,
