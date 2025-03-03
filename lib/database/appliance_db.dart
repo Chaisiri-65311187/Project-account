@@ -28,20 +28,25 @@ class ApplianceDB {
 
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE appliances (
-        id TEXT PRIMARY KEY,
-        name TEXT NOT NULL,
-        brand TEXT NOT NULL,
-        isOn INTEGER NOT NULL,
-        imgPath TEXT NOT NULL,
-        lastOpenedTime TEXT  // เพิ่มคอลัมน์ใหม่
-      )
-    ''');
+    CREATE TABLE appliances (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      brand TEXT NOT NULL,
+      isOn INTEGER NOT NULL,
+      imgPath TEXT NOT NULL,
+      lastOpenedTime TEXT  
+    )
+  ''');
   }
 
   Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      await db.execute('ALTER TABLE appliances ADD COLUMN lastOpenedTime TEXT');
+      try {
+        await db
+            .execute('ALTER TABLE appliances ADD COLUMN lastOpenedTime TEXT');
+      } catch (e) {
+        print('Error upgrading database: $e');
+      }
     }
   }
 
